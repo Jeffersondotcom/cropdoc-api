@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropDoc AI — Smart Crop Diagnosis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i data-lucide="leaf"></i>
+                <span>CropDoc</span>
+            </div>
+            <button class="new-chat-btn" id="new-chat-btn" title="New Chat">
+                <i data-lucide="plus"></i> New Chat
+            </button>
+        </div>
+        <div class="sidebar-chats" id="sidebar-chats">
+            <!-- Chat list items will be injected here -->
+        </div>
+        <div class="sidebar-footer">
+            <p>Powered by ONNX + Gemini AI</p>
+        </div>
+    </aside>
+
+    <!-- Sidebar Overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Main Chat Area -->
+    <main class="chat-main">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <button class="hamburger" id="hamburger-btn" title="Toggle sidebar">
+                <i data-lucide="menu"></i>
+            </button>
+            <h2 class="topbar-title" id="topbar-title">New Conversation</h2>
+            <div class="topbar-actions">
+                <button class="topbar-btn" id="download-chat-btn" title="Download chat">
+                    <i data-lucide="download"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div class="messages-area" id="messages-area">
+            <!-- Welcome Screen (shown when no messages) -->
+            <div class="welcome-screen" id="welcome-screen">
+                <div class="welcome-icon">
+                    <i data-lucide="leaf"></i>
+                </div>
+                <h1>CropDoc AI</h1>
+                <p>Take a photo of your crop or ask a question to get started</p>
+                <div class="welcome-suggestions">
+                    <button class="suggestion-chip" onclick="sendSuggestion('What crops can you diagnose?')">
+                        <i data-lucide="help-circle"></i> What crops can you diagnose?
+                    </button>
+                    <button class="suggestion-chip" onclick="sendSuggestion('How do I prevent tomato blight?')">
+                        <i data-lucide="shield"></i> How do I prevent tomato blight?
+                    </button>
+                    <button class="suggestion-chip" onclick="sendSuggestion('Best practices for corn farming')">
+                        <i data-lucide="sprout"></i> Best practices for corn farming
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat messages will be injected here -->
+        </div>
+
+        <!-- Input Bar -->
+        <div class="input-bar">
+            <div class="input-container">
+                <div class="input-actions">
+                    <input type="file" id="camera-input" accept="image/*" capture="environment" hidden>
+                    <input type="file" id="gallery-input" accept="image/*" hidden>
+                    <button class="input-action-btn" id="camera-btn" title="Take photo">
+                        <i data-lucide="camera"></i>
+                    </button>
+                    <button class="input-action-btn" id="gallery-btn" title="Upload from gallery">
+                        <i data-lucide="image"></i>
+                    </button>
+                </div>
+                <input type="text" id="message-input" placeholder="Ask about your crops..." autocomplete="off">
+                <button class="send-btn" id="send-btn" title="Send message" disabled>
+                    <i data-lucide="arrow-up"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
