@@ -71,7 +71,7 @@ TREATMENTS = {
     "Tomato - Healthy": "No treatment needed. Crop is healthy.",
 }
 
-session = ort.InferenceSession("cropdoc_v2_single.onnx")
+session = ort.InferenceSession("cropdoc_model_single.onnx")
 
 def preprocess(image: Image.Image):
     image = image.resize((224, 224))
