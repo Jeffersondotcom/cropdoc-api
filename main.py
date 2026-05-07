@@ -1,22 +1,9 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-from pydantic import BaseModel
-from typing import List
 import onnxruntime as ort
 import numpy as np
 from PIL import Image
 import io
-import os
-import google.generativeai as genai
-from dotenv import load_dotenv
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
-if GEMINI_API_KEY and GEMINI_API_KEY != "your_gemini_api_key_here":
-    genai.configure(api_key=GEMINI_API_KEY)
 
 app = FastAPI()
 
@@ -83,11 +70,9 @@ def preprocess(image: Image.Image):
     img_array = np.expand_dims(img_array, axis=0).astype(np.float32)
     return img_array
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
 @app.get("/")
 def root():
-    return FileResponse("static/index.html")
+    return {"status": "CropDoc API is running"}
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
@@ -107,51 +92,3 @@ async def predict(file: UploadFile = File(...)):
         "treatment": treatment,
         "severity": "High" if confidence > 90 else "Moderate" if confidence > 70 else "Low"
     }
-
-# --- Gemini Chat Endpoint ---
-
-class ChatMessage(BaseModel):
-    role: str  # "user" or "ai"
-    content: str
-
-class ChatRequest(BaseModel):
-    message: str
-    history: List[ChatMessage]
-
-@app.post("/api/chat")
-async def chat_with_ai(request: ChatRequest):
-    if not GEMINI_API_KEY or GEMINI_API_KEY == "your_gemini_api_key_here":
-        raise HTTPException(status_code=500, detail="Gemini API Key not configured. Please set GEMINI_API_KEY in .env file.")
-
-    model = genai.GenerativeModel('gemini-1.5-flash')
-
-    # Build Gemini conversation history
-    gemini_history = []
-
-    # System context
-    gemini_history.append({
-        "role": "user",
-        "parts": ["You are CropDoc, an expert AI agricultural advisor. You help farmers diagnose crop diseases, recommend treatments, find pesticides, and give practical farming advice. Be helpful, empathetic, and practical. Keep responses concise but thorough. If a farmer shares diagnosis results with you, reference those results in your advice."]
-    })
-    gemini_history.append({
-        "role": "model",
-        "parts": ["I understand. I am CropDoc, ready to help farmers with crop disease diagnosis and treatment advice. I'll be practical and empathetic in my responses."]
-    })
-
-    # Map conversation history (exclude the last user msg since send_message adds it)
-    history_to_map = request.history[:-1] if len(request.history) > 0 else []
-    for msg in history_to_map:
-        role = "model" if msg.role == "ai" else "user"
-        gemini_history.append({
-            "role": role,
-            "parts": [msg.content]
-        })
-
-    chat = model.start_chat(history=gemini_history)
-
-    try:
-        response = chat.send_message(request.message)
-        return {"reply": response.text}
-    except Exception as e:
-        print(f"Gemini Error: {e}")
-        raise HTTPException(status_code=500, detail=f"AI chat error: {str(e)}")
