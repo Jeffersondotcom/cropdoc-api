@@ -23,6 +23,13 @@ const galleryBtn = document.getElementById('gallery-btn');
 const topbarTitle = document.getElementById('topbar-title');
 const downloadChatBtn = document.getElementById('download-chat-btn');
 
+// Validation Modal Elements
+const validationModal = document.getElementById('validation-modal');
+const retakeBtn = document.getElementById('retake-btn');
+const continueBtn = document.getElementById('continue-btn');
+let pendingImageFile = null;
+let pendingImageSource = null;
+
 // ===== SIDEBAR TOGGLE =====
 hamburgerBtn.addEventListener('click', () => {
     sidebar.classList.toggle('open');
@@ -401,15 +408,37 @@ galleryBtn.addEventListener('click', () => galleryInput.click());
 
 cameraInput.addEventListener('change', (e) => {
     if (e.target.files && e.target.files.length > 0) {
-        sendImageForDiagnosis(e.target.files[0]);
+        pendingImageFile = e.target.files[0];
+        pendingImageSource = 'camera';
+        validationModal.classList.add('active');
         e.target.value = '';
     }
 });
 
 galleryInput.addEventListener('change', (e) => {
     if (e.target.files && e.target.files.length > 0) {
-        sendImageForDiagnosis(e.target.files[0]);
+        pendingImageFile = e.target.files[0];
+        pendingImageSource = 'gallery';
+        validationModal.classList.add('active');
         e.target.value = '';
+    }
+});
+
+retakeBtn.addEventListener('click', () => {
+    validationModal.classList.remove('active');
+    if (pendingImageSource === 'camera') {
+        cameraInput.click();
+    } else {
+        galleryInput.click();
+    }
+    pendingImageFile = null;
+});
+
+continueBtn.addEventListener('click', () => {
+    validationModal.classList.remove('active');
+    if (pendingImageFile) {
+        sendImageForDiagnosis(pendingImageFile);
+        pendingImageFile = null;
     }
 });
 

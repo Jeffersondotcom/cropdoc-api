@@ -99,10 +99,20 @@ async def predict(file: UploadFile = File(...)):
     confidence = float(np.max(probabilities)) * 100
     disease = CLASS_NAMES[predicted_idx]
     treatment = TREATMENTS[disease]
+
+    if confidence < 50:
+        return {
+            "disease": "Not a crop leaf",
+            "confidence": round(confidence, 2),
+            "treatment": "Please photograph a crop leaf in natural lighting. Point your camera at an affected leaf, not fruit, stem, or soil.",
+            "severity": "None",
+            "warning": "Image does not appear to be a crop leaf."
+        }
+
     return {
-    "disease": disease if confidence >= 70 else "Uncertain",
-    "confidence": round(confidence, 2),
-    "treatment": treatment if confidence >= 70 else "Confidence too low for a reliable diagnosis. Please take a clearer photo of the affected leaf in good lighting.",
-    "severity": "High" if confidence > 90 else "Moderate" if confidence > 70 else "Low",
-    "warning": None if confidence >= 70 else "Low confidence prediction. Results may not be accurate."
-}
+        "disease": disease if confidence >= 70 else "Uncertain",
+        "confidence": round(confidence, 2),
+        "treatment": treatment if confidence >= 70 else "Confidence too low for a reliable diagnosis. Please take a clearer photo of the affected leaf in good lighting.",
+        "severity": "High" if confidence > 90 else "Moderate" if confidence > 70 else "Low",
+        "warning": None if confidence >= 70 else "Low confidence prediction. Results may not be accurate."
+    }
