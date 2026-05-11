@@ -4,6 +4,19 @@ import onnxruntime as ort
 import numpy as np
 from PIL import Image
 import io
+import os
+import gdown
+
+MODEL_PATH = "cropdoc_v2_single.onnx"
+
+if not os.path.exists(MODEL_PATH):
+    print("Downloading v2 model from Google Drive...")
+    gdown.download(
+        "https://drive.google.com/uc?id=1XglOrkbrtAn0G6DT60y3k_RT_blVUR3d",
+        MODEL_PATH,
+        quiet=False
+    )
+    print("Model downloaded.")
 
 app = FastAPI()
 
@@ -58,7 +71,7 @@ TREATMENTS = {
     "Tomato - Healthy": "No treatment needed. Crop is healthy.",
 }
 
-session = ort.InferenceSession("cropdoc_model_single.onnx")
+session = ort.InferenceSession(MODEL_PATH)
 
 def preprocess(image: Image.Image):
     image = image.resize((224, 224))
