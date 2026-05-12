@@ -7,7 +7,7 @@ import io
 import os
 import gdown
 
-MODEL_PATH = "cropdoc_v2_single.onnx"
+MODEL_PATH = "cropdoc_v2_single_v2.onnx"
 
 if not os.path.exists(MODEL_PATH):
     print("Downloading v2 model from Google Drive...")
