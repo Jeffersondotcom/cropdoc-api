@@ -28,47 +28,66 @@ app.add_middleware(
 )
 
 CLASS_NAMES = [
-    "Corn - Cercospora Leaf Spot",
-    "Corn - Common Rust",
-    "Corn - Northern Leaf Blight",
-    "Corn - Healthy",
-    "Pepper - Bacterial Spot",
-    "Pepper - Healthy",
-    "Potato - Early Blight",
-    "Potato - Late Blight",
-    "Potato - Healthy",
-    "Tomato - Bacterial Spot",
-    "Tomato - Early Blight",
-    "Tomato - Late Blight",
-    "Tomato - Leaf Mold",
-    "Tomato - Septoria Leaf Spot",
-    "Tomato - Spider Mites",
-    "Tomato - Target Spot",
-    "Tomato - Yellow Leaf Curl Virus",
-    "Tomato - Mosaic Virus",
-    "Tomato - Healthy",
+    "Apple - Apple Scab",                          # 0
+    "Apple - Black Rot",                           # 1
+    "Apple - Cedar Apple Rust",                    # 2
+    "Apple - Healthy",                             # 3
+    "Blueberry - Healthy",                         # 4
+    "Cherry - Powdery Mildew",                     # 5
+    "Cherry - Healthy",                            # 6
+    "Corn - Cercospora Leaf Spot",                 # 7
+    "Corn - Common Rust",                          # 8
+    "Corn - Northern Leaf Blight",                 # 9
+    "Corn - Healthy",                              # 10
+    "Grape - Black Rot",                           # 11
+    "Grape - Esca (Black Measles)",                # 12
+    "Grape - Leaf Blight",                         # 13
+    "Grape - Healthy",                             # 14
+    "Orange - Citrus Greening",                    # 15
+    "Peach - Bacterial Spot",                      # 16
+    "Peach - Healthy",                             # 17
+    "Pepper - Bacterial Spot",                     # 18
+    "Pepper - Healthy",                            # 19
+    "Potato - Early Blight",                       # 20
+    "Potato - Late Blight",                        # 21
+    "Potato - Healthy",                            # 22
+    "Raspberry - Healthy",                         # 23
+    "Soybean - Healthy",                           # 24
+    "Squash - Powdery Mildew",                     # 25
+    "Strawberry - Leaf Scorch",                    # 26
+    "Strawberry - Healthy",                        # 27
+    "Tomato - Bacterial Spot",                     # 28
+    "Tomato - Early Blight",                       # 29
+    "Tomato - Late Blight",                        # 30
+    "Tomato - Leaf Mold",                          # 31
+    "Tomato - Septoria Leaf Spot",                 # 32
+    "Tomato - Spider Mites",                       # 33
+    "Tomato - Target Spot",                        # 34
+    "Tomato - Yellow Leaf Curl Virus",             # 35
+    "Tomato - Mosaic Virus",                       # 36
+    "Tomato - Healthy",                            # 37
 ]
 
 TREATMENTS = {
-    "Corn - Cercospora Leaf Spot": "Apply fungicides containing azoxystrobin or pyraclostrobin. Remove infected leaves.",
-    "Corn - Common Rust": "Apply fungicides early. Plant resistant varieties next season.",
-    "Corn - Northern Leaf Blight": "Apply mancozeb-based fungicide. Rotate crops next season.",
-    "Corn - Healthy": "No treatment needed. Crop is healthy.",
-    "Pepper - Bacterial Spot": "Apply copper-based bactericide. Avoid overhead irrigation.",
-    "Pepper - Healthy": "No treatment needed. Crop is healthy.",
-    "Potato - Early Blight": "Apply chlorothalonil fungicide. Remove infected leaves immediately.",
-    "Potato - Late Blight": "Apply metalaxyl fungicide immediately. This spreads fast.",
-    "Potato - Healthy": "No treatment needed. Crop is healthy.",
-    "Tomato - Bacterial Spot": "Apply copper hydroxide spray. Remove and destroy infected plants.",
-    "Tomato - Early Blight": "Apply mancozeb fungicide. Mulch around base of plants.",
-    "Tomato - Late Blight": "Apply metalaxyl immediately. Destroy infected plants.",
-    "Tomato - Leaf Mold": "Improve ventilation. Apply copper-based fungicide.",
-    "Tomato - Septoria Leaf Spot": "Apply fungicide with chlorothalonil. Remove lower infected leaves.",
-    "Tomato - Spider Mites": "Apply acaricide or neem oil. Increase humidity around plants.",
-    "Tomato - Target Spot": "Apply azoxystrobin fungicide. Avoid wetting leaves when watering.",
-    "Tomato - Yellow Leaf Curl Virus": "No cure. Remove infected plants. Control whitefly population.",
-    "Tomato - Mosaic Virus": "No cure. Remove infected plants. Disinfect tools.",
-    "Tomato - Healthy": "No treatment needed. Crop is healthy.",
+    "Apple - Apple Scab": "Apply fungicide with myclobutanil. Remove infected leaves.",
+"Apple - Black Rot": "Prune infected branches. Apply captan-based fungicide.",
+"Apple - Cedar Apple Rust": "Apply fungicide at bud break. Remove nearby juniper hosts.",
+"Apple - Healthy": "No treatment needed.",
+"Blueberry - Healthy": "No treatment needed.",
+"Cherry - Powdery Mildew": "Apply sulfur-based fungicide. Improve air circulation.",
+"Cherry - Healthy": "No treatment needed.",
+"Grape - Black Rot": "Apply mancozeb fungicide. Remove mummified fruit.",
+"Grape - Esca (Black Measles)": "No cure. Remove infected wood. Apply wound sealant.",
+"Grape - Leaf Blight": "Apply copper-based fungicide. Remove infected leaves.",
+"Grape - Healthy": "No treatment needed.",
+"Orange - Citrus Greening": "No cure. Remove infected trees. Control psyllid population.",
+"Peach - Bacterial Spot": "Apply copper bactericide. Avoid overhead irrigation.",
+"Peach - Healthy": "No treatment needed.",
+"Raspberry - Healthy": "No treatment needed.",
+"Soybean - Healthy": "No treatment needed.",
+"Squash - Powdery Mildew": "Apply potassium bicarbonate or neem oil spray.",
+"Strawberry - Leaf Scorch": "Apply fungicide. Remove infected leaves. Avoid overhead watering.",
+"Strawberry - Healthy": "No treatment needed.",
 }
 
 session = ort.InferenceSession(MODEL_PATH)
@@ -85,7 +104,7 @@ def preprocess(image: Image.Image):
 
 @app.get("/")
 def root():
-    return {"status": "CropDoc API is running"}
+    return {"status": "GreenDoc API is running"}
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
